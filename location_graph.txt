@@ -1,0 +1,528 @@
+#종로구
+gg<-apt_buy3%>%
+  filter(지역코드==11110)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_종로구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#중구
+gg<-apt_buy3%>%
+  filter(지역코드==11140)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_중구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#용산구
+gg<-apt_buy3%>%
+  filter(지역코드==11170)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_용산구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#성동구
+gg<-apt_buy3%>%
+  filter(지역코드==11200)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_성동구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#광진구
+gg<-apt_buy3%>%
+  filter(지역코드==11215)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_광진구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#동대문구
+gg<-apt_buy3%>%
+  filter(지역코드==11230)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_동대문구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#중랑구
+gg<-apt_buy3%>%
+  filter(지역코드==11260)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_중랑구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#성북구
+gg<-apt_buy3%>%
+  filter(지역코드==11290)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_성북구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#강북구
+gg<-apt_buy3%>%
+  filter(지역코드==11305)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_강북구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#도봉구
+gg<-apt_buy3%>%
+  filter(지역코드==11320)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_도봉구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#노원구
+gg<-apt_buy3%>%
+  filter(지역코드==11350)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_노원구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+
+#은평구
+gg<-apt_buy3%>%
+  filter(지역코드==11380)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_은평구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+
+#서대문구
+gg<-apt_buy3%>%
+  filter(지역코드==11410)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_서대문구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+
+#마포구
+gg<-apt_buy3%>%
+  filter(지역코드==11440)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_마포구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#양천구
+gg<-apt_buy3%>%
+  filter(지역코드==11470)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_양천구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#강서구
+gg<-apt_buy3%>%
+  filter(지역코드==11500)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_강서구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+
+#구로구
+gg<-apt_buy3%>%
+  filter(지역코드==11530)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_구로구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#금천구
+gg<-apt_buy3%>%
+  filter(지역코드==11545)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_금천구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#영등포구
+gg<-apt_buy3%>%
+  filter(지역코드==11560)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_영등포구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#동작구
+gg<-apt_buy3%>%
+  filter(지역코드==11590)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_동작구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#관악구
+gg<-apt_buy3%>%
+  filter(지역코드==11620)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_관악구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#서초구
+gg<-apt_buy3%>%
+  filter(지역코드==11650)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_서초구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#강남구
+gg<-apt_buy3%>%
+  filter(지역코드==11680)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_강남구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#송파구
+gg<-apt_buy3%>%
+  filter(지역코드==11710)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_송파구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+#강동구
+gg<-apt_buy3%>%
+  filter(지역코드==11740)%>%
+  group_by(day)%>%
+  ggplot(aes(x=day,y=거래금액))+
+  geom_line()+
+  theme_bw()
+
+gg+scale_x_date(breaks = databreaks)+ylab("거래금액")+
+  xlab("거래일자")+
+  ggtitle("월별 거래금액 추이_강동구")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_vline(xintercept = as.numeric(apt_buy3$day[c(55,589,595,657,731,313)]), 
+             color = "red", linetype = 2)
+
+
+
+##공간패턴보기
+code2<-read.csv("C:\\Users\\hoeeun\\Desktop\\최종데이터\\자치구좌표_2.csv",
+                header=T)
+
+map<-shapefile("C:\\Users\\hoeeun\\Desktop\\최종데이터\\SIG_201703\\TL_SCCO_SIG.shp")
+
+
+map<-spTransform(map,CRSobj = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+
+new_map<-fortify(map,region= "SIG_CD")
+View(new_map)
+
+new_map$id<-as.numeric(new_map$id)
+seoul_map<-new_map[new_map$id<=11740,]
+View(seoul_map)
+
+apt_buy3<-apt_buy3%>%
+  dplyr::filter(!lon>=127.2)
+
+gg<-ggplot() + 
+  geom_polygon(data = seoul_map, aes(x=long, y=lat, group=group),
+               fill = 'white', color='black')+
+  theme_bw()
+  
+
+gg+geom_point(data=apt_buy3,
+             aes(x=lon,y=lat),
+             size=1, alpha=0.5, col="blue")
+
+#월별 매매건수
+#1월
+gg+geom_point(data=apt_buy3%>%
+                filter(day<="2020-01-30"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#F8766D")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("1월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+#2월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-02-01"&day<"2020-03-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#ED8141")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("2월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#3월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-03-01"&day<"2020-04-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#BB9D00")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("3월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#4월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-04-01"&day<"2020-05-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#00B81F")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("4월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+#5월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-05-01"&day<"2020-06-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#00C0B8")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("5월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#6월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-06-01"&day<"2020-07-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#00A5FF")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("6월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#7월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-07-01"&day<"2020-08-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#9590FF")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("7월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#8월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-08-01"&day<"2020-09-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#E76BF3")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("8월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#9월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-09-01"&day<"2020-10-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#FF689F")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("9월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+#10월
+gg+geom_point(data=apt_buy3%>%
+                filter(day>="2020-10-01"),
+              aes(x=lon,y=lat),
+              size=1, alpha=0.8, col="#FC717F")+
+  geom_text(data = code2,
+            aes(x = 경도,y = 위도,label = paste(시군구명)),size=3)+
+  ggtitle("10월매매")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+##데이터 정리
+rm(map,new_map)
+
+plot(apt_buy3)
+
+
+##종속변수 추가
+head(apt_buy3)
+apt_buy3<-apt_buy3%>%
+  mutate(y=ifelse(거래금액<=50000,1,0))
+str(apt_buy3$y)
+
+head(apt_rent3)
+apt_rent3<-apt_rent3%>%
+  filter(!is.na(lon))
