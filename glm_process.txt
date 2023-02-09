@@ -1,0 +1,263 @@
+##########openapi 6월까지만
+S.code<-read.csv("C:/Users/hoeeun/Desktop/아파트매매_데이터/서울시_법정동코드.csv")
+#open api packages
+library(XML)
+library(RCurl)
+library(dplyr)
+
+#analysis packages
+library(ggplot2)
+library(stringr)
+library(gridExtra)
+
+#map packages
+library(ggmap)
+library(rlang)
+library(raster)
+library(rgeos)
+library(maptools)
+library(rgdal)
+
+#heatmapcods
+library(corrplot)
+
+########최종데이터 분석
+final<-read.csv("C:\\Users\\hoeeun\\Desktop\\최종데이터\\version_final2.csv")
+str(final)
+summary(final)
+
+names(final)
+#종속변수: 매매여부
+#독립변수 범주형:상권상태(명목), 생활권역(명목),
+#         연속형:건축년도, 전용면적, 층, 역세권지가지수, 어린이집수,
+#                인당공원면적, 공연장이용률, 카페이용률, 요양기관이용률
+
+final<-final%>%
+  mutate(매매여부=ifelse(거래금액<=50000,1,0))
+
+train<-final%>%
+  filter(월<=5)
+
+test<-final%>%
+  filter(월==6)
+
+###################독립성검정(명목형)
+##생활권역
+finalGap2<-xtabs(~생활권역+매매여부,data=train)
+finalGap2
+
+x<-c(155,5596,857,626,3089)
+n<-c(500,10498,2395,1810,7029)
+prop.test(x,n,conf.level = 0.95,correct = F)#비율 차이가 있다
+
+chisq.test(finalGap2)
+stdres2<-chisq.test(finalGap2)$stdres
+stdres2
+
+library(vcd)
+vcd::mosaic(finalGap2,gp=shading_Friendly,residuals=stdres2,
+       residuals_type="Std\nresiduals",labeling=labeling_residuals)
+
+
+################
+finalGap3<-xtabs(~상권상태+매매여부,data=train)
+finalGap3
+
+chisq.test(finalGap3)
+stdres3<-chisq.test(finalGap3)$stdres
+stdres3
+
+###################상관관계
+#전체변수 상관관계
+str(train)
+train_cor<-cor(train%>%
+                 select(-X,-생활권역,-지역구,-지역코드,-분기,
+                        -월,-일자,-거래금액,-법정동,-아파트,
+                        -상권상태,-매매여부))
+
+round(train_cor,2)
+
+corrplot(train_cor)
+
+col<-colorRampPalette(c("#BB4444","#EE9988","#FFFFFF","#77AADD","#4477AA"))
+
+corrplot(train_cor,
+         method = "color",
+         col=col(200),
+         type="lower",
+         order="hclust",
+         addCoef.col = "black",
+         tl.col = "black",
+         tl.srt = 10,
+         diag = F)
+
+#####################월별거래금액
+final_box<-final
+final_box$월<-as.factor(final_box$월)
+final_box$지역코드<-as.factor(final_box$지역코드)
+
+ggplot(data=final_box,aes(x=월,y=거래금액,group=월,fill=월))+
+  geom_boxplot()
+
+####################지역별거래금액
+ggplot(data=final_box,aes(x=지역코드,y=거래금액,group=지역코드))+
+  geom_boxplot()
+
+###################지도 시각화
+register_google(key ='AIzaSyBbWWBZn60hG-ldcbwcsgKurXvaw6rZFRs')
+
+code2<-read.csv("C:\\Users\\hoeeun\\Desktop\\최종데이터\\자치구좌표_2.csv",
+               header=T)
+
+head(train)
+
+map<-shapefile("C:\\Users\\hoeeun\\Desktop\\최종데이터\\SIG_201703\\TL_SCCO_SIG.shp")
+
+
+map<-spTransform(map,CRSobj = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+
+new_map<-fortify(map,region = "SIG_CD")
+View(new_map)
+
+new_map$id<-as.numeric(new_map$id)
+seoul_map<-new_map[new_map$id<=11740,]
+View(seoul_map)
+
+View(train)
+train_map<-train
+train_map<-rename(train_map,"id"="지역코드")
+
+#지역별 매매가격평균
+train_map_s<-train_map%>%
+  group_by(id)%>%
+  summarize(mean=mean(거래금액))
+
+train_map_s<-as.data.frame(train_map_s)
+str(train_map_s)
+
+##최종그림
+train_merge<-merge(seoul_map,train_map_s,by="id")
+
+ggplot()+
+  geom_polygon(data=train_merge,
+               aes(x=long,y=lat,group=group,fill=mean),color="white")+
+  scale_fill_gradient(low = "snow3", high = "#ff3232",
+                      space = "Lab", guide = "colourbar")+
+  theme_bw()+
+  ggtitle("서울시 집값 분포")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_text(data = code2,
+             aes(x = 경도,
+                 y = 위도,
+                 label = paste(시군구명)),
+            size=3)
+
+
+#지역별 면적평균
+train_map_s2<-train_map%>%
+  group_by(id)%>%
+  summarize(mean=mean(전용면적))
+
+train_map_s2<-as.data.frame(train_map_s2)
+
+train_merge2<-merge(seoul_map,train_map_s2,by="id")
+
+ggplot()+
+  geom_polygon(data=train_merge2,
+               aes(x=long,y=lat,group=group,fill=mean),color="white")+
+  scale_fill_gradient(low = "snow3", high = "turquoise4",
+                      space = "Lab", guide = "colourbar")+
+  theme_bw()+
+  ggtitle("서울시 전용면적 분포")+
+  theme(plot.title = element_text(hjust = 0.5))+
+  geom_text(data = code2,
+            aes(x = 경도,
+                y = 위도,
+                label = paste(시군구명)),
+            size=3)
+
+
+################모형적합
+##training(1-5월)&test(6월)
+
+#fitting
+fit<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+공원이용+어린이집수+역세권지가지수+요양기관이용+factor(상권상태)+카페이용,family=binomial,data=train)
+summary(fit)#공원이용과 어린이집수 유의하지않음-> 다중공산성확인
+library(car)
+Anova(fit)
+
+
+#다중공산성
+vif(fit)#GVIF^(1/(2*Df))가 2이상이면 의심됨 #요양기관이용, 카페이용
+cor(train$요양기관이용,train$카페이용) #0.569 약간의 상관계수를 보고-> 둘 중 하나 선택하기로-> 젊은층에 대한 공연장, 상권이런 것이 많으니 카페를 제외해봄
+plot(final$요양기관이용,final$카페이용) #유동인구대비의 자료로, 그것에 대한 영향?
+
+ggplot(data=train,aes(x=요양기관이용,y=카페이용))+
+  geom_point()+
+  theme_bw()+
+  ggtitle("변수 상관관계")+
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+#fitting(카페제외)
+fit<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+공원이용+어린이집수+역세권지가지수+요양기관이용+factor(상권상태),family=binomial,data=train)
+summary(fit)
+vif(fit)
+
+#fitting(요양기관이용제외)
+fit<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+공원이용+어린이집수+역세권지가지수+factor(상권상태)+카페이용,family=binomial,data=train)
+summary(fit)
+vif(fit)
+
+#fitting(공원이용제외)
+fit<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+어린이집수+역세권지가지수+factor(상권상태)+카페이용,family=binomial,data=train)
+summary(fit)
+vif(fit)
+
+#step
+library(MASS)
+stepAIC(fit)
+str(final)
+
+fit_step<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+어린이집수+역세권지가지수+factor(상권상태)+카페이용+요양기관이용,family=binomial,data=train)
+summary(fit_step)
+vif(fit_step)
+
+#######training data#########
+fit<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+어린이집수+역세권지가지수+factor(상권상태)+카페이용,family=binomial,data=train)
+summary(fit)
+Anova(fit)
+
+prop<-sum(train$매매여부)/nrow(train)
+predicted<-as.numeric(fitted(fit)>prop)
+xtabs(~train$매매여부+predicted)
+
+library(pROC)
+rocplot<-roc(매매여부~fitted(fit),data=train)
+plot.roc(rocplot,legacy.axes=TRUE)
+auc(rocplot)
+
+############test data##########
+fit2<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+어린이집수+역세권지가지수+상권상태+카페이용,family=binomial,data=test)
+
+prop<-sum(test$매매여부)/nrow(test)
+predicted<-as.numeric(fitted(fit2)>prop)
+xtabs(~test$매매여부+predicted)
+
+rocplot<-roc(매매여부~fitted(fit2),data=test)
+plot.roc(rocplot,legacy.axes=TRUE)
+auc(rocplot)
+
+#################train_data 확률해석##
+fit<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+어린이집수+역세권지가지수+factor(상권상태)+카페이용,family=binomial,data=train)
+summary(fit)
+
+fit0<-glm(매매여부~1,family=binomial,data=train)
+summary(fit0)
+
+fit2<-glm(매매여부~factor(생활권역)+건축년도+전용면적+층+공연장이용+어린이집수+역세권지가지수+factor(상권상태)+카페이용+공원이용,family=binomial,data=train)
+summary(fit2)
+
+drop1(fit,test="LRT")
+anova(fit0,fit,test="LRT")
+anova(fit,fit2,test="LRT")
