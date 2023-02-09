@@ -1,0 +1,202 @@
+##open api packages
+library(XML)
+library(RCurl)
+library(dplyr)
+
+library(rvest)
+library(ggmap)
+
+library(rlang)
+library(raster)
+library(rgeos)
+library(maptools)
+library(rgdal)
+
+#서울시 법정동 코드
+S.code<-read.csv("C:\\Users\\hoeeun\\Desktop\\최종데이터\\새 폴더\\서울시_법정동코드.csv")
+
+#데이터 호출
+######open API 데이터 호출(아파트매매)
+seviceURL<-"http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
+operation<-"getRTMSDataSvcAptTrade"
+serviceKey<-"cIdpQ6nsl1wkTi8MuDCcdvaPwelskPKEwt9nuUieA099PQ5e92Eb6iMotBgxsqA7DYOSKVX1GfFUwyKqrsDVcQ%3D%3D"
+
+totalData<-data.frame()
+
+for(j in S.code$지역코드){
+  for (i in seq(202001,202010,1)) {
+    url<-paste0(seviceURL,
+                operation,
+                paste0("?serviceKey=",serviceKey),
+                paste0("&LAWD_CD=",j),
+                paste0("&DEAL_YMD=",i))
+    xmlDocument<-xmlTreeParse(print(url),useInternalNodes = T,encoding ="UTF-8" )
+    rootNode<-xmlRoot(xmlDocument)
+    xmlData<-xmlToDataFrame(nodes=getNodeSet(rootNode,"//item"))
+    totalData<-rbind(totalData,xmlData)
+  }
+}
+
+View(totalData)
+
+names(totalData)<-c("거래금액","건축년도","년","법정동","아파트","월","일","전용면적","지번","지역코드","층")
+
+buy<-merge(totalData,S.code)
+
+write.csv(buy,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울실매매가.csv")
+buy<-read.csv("C:\\Users\\hoeeun\\Desktop\\학술제\\서울실매매가.csv")
+buy<-buy%>%
+  select(-X)
+str(buy)
+
+#날짜 시계열 데이터로
+df<-data.frame()
+
+for(i in 1:66424){
+  날짜<-paste0(paste0(buy$년[i]),
+             paste0(sprintf('-%02d', buy$월[i])),
+             paste0(sprintf('-%02d', buy$일[i])))
+  df<-rbind(df,data.frame(day=날짜))
+}
+
+apt_buy<-cbind(buy,df)
+apt_buy<-apt_buy%>%
+  select(-년,-월,-일,-지번)
+
+#지역변수
+location<-data.frame()
+
+for(i in 1:66424){
+  위치<-paste0(paste0(apt_buy$지역구[i]),
+             paste0(apt_buy$법정동[i]),
+             paste0(apt_buy$아파트[i]))
+  location<-rbind(location,data.frame(region=위치))
+}
+
+apt_buy<-cbind(apt_buy,location)
+write.csv(apt_buy,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울실매매가2.csv")
+
+register_google(key ='AIzaSyBbWWBZn60hG-ldcbwcsgKurXvaw6rZFRs')
+A<-geocode(apt_buy$region)
+apt_buy2<-cbind(apt_buy,A)
+
+str(apt_buy2)
+apt_buy2$day<-as.Date(apt_buy2$day)
+
+write.csv(apt_buy2,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울실매매가_final.csv")
+
+#데이터 호출
+######open API 데이터 호출(아파트전월세)
+seviceURL<-"http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
+operation<-"getRTMSDataSvcAptRent"
+serviceKey<-"cIdpQ6nsl1wkTi8MuDCcdvaPwelskPKEwt9nuUieA099PQ5e92Eb6iMotBgxsqA7DYOSKVX1GfFUwyKqrsDVcQ%3D%3D"
+
+totalData_rent<-data.frame()
+
+for(j in S.code$지역코드){
+  for (i in seq(202001,202010,1)) {
+    url<-paste0(seviceURL,
+                operation,
+                paste0("?LAWD_CD=",j),
+                paste0("&DEAL_YMD=",i),
+                paste0("&serviceKey=",serviceKey))
+    xmlDocument<-xmlTreeParse(print(url),useInternalNodes = T,encoding ="UTF-8" )
+    rootNode<-xmlRoot(xmlDocument)
+    xmlData_rent<-xmlToDataFrame(nodes=getNodeSet(rootNode,"//item"))
+    totalData_rent<-rbind(totalData_rent,xmlData_rent)
+  }
+}
+
+View(totalData_rent)
+
+names(totalData_rent)<-c("건축년도","년","법정동","보증금액","아파트","월","월세금액","일","전용면적","지번","지역코드","층")
+
+write.csv(totalData_rent,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울전월세.csv")
+
+rent<-read.csv("C:\\Users\\hoeeun\\Desktop\\학술제\\서울전월세.csv")
+str(rent)
+
+#날짜 시계열 데이터로
+df<-data.frame()
+
+for(i in 1:145395){
+  날짜<-paste0(paste0(rent$년[i]),
+             paste0(sprintf('-%02d', rent$월[i])),
+             paste0(sprintf('-%02d', rent$일[i])))
+  df<-rbind(df,data.frame(day=날짜))
+}
+
+apt_rent<-cbind(rent,df)
+apt_rent<-apt_rent%>%
+  select(-년,-월,-일,-지번)
+
+apt_rent$day<-as.Date(apt_rent$day)
+str(apt_rent)
+
+#지역변수
+apt_rent<-merge(apt_rent,S.code)
+
+location<-data.frame()
+
+for(i in 1:145395){
+  위치<-paste0(paste0(apt_rent$지역구[i]),
+             paste0(apt_rent$법정동[i]),
+             paste0(apt_rent$아파트[i]))
+  location<-rbind(location,data.frame(region=위치))
+}
+
+apt_rent2<-cbind(apt_rent,location)
+apt_rent2<-apt_rent2%>%
+  select(-X)
+
+write.csv(apt_rent2,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울전월세2.csv")
+apt_rent2<-read.csv("C:\\Users\\hoeeun\\Desktop\\학술제\\서울전월세2.csv")
+
+##전세만 추리기
+A<-apt_rent2%>%
+  filter(월세금액==0)%>%
+  filter(전용면적<=85)%>%
+  filter(보증금액<=30000)
+
+A<-A%>%
+  select(-법정동,-아파트,-월세금액,-지역구,-X)
+A$day<-as.Date(A$day)
+
+str(A)
+
+apt_rent4<-A[!duplicated(A[,"region"]),]
+
+A<-geocode(apt_rent4$region)
+
+apt_rent4<-cbind(apt_rent4,A)
+write.csv(apt_rent4,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울전세개별.csv")
+apt_rent4<-apt_rent4%>%
+  select(region,lon,lat)
+A_1<-merge(A,apt_rent4,by="region")
+str(apt_rent3)
+apt_rent3<-read.csv("서울전세_final.csv")
+
+##데이터정리
+rm(A,apt_buy,apt_rent,apt_rent3,B,buy,df,location,rent,totalData_rent,xmlData_rent)
+ls()
+rm(seviceURL,날짜,위치)
+rm(apt_buy2)
+
+##매매데이터 9억으로 제한
+apt_buy3<-apt_buy2%>%
+  filter(거래금액<=90000)
+summary(apt_buy3$거래금액)
+
+##최종데이터 변수 정리
+write.csv(apt_rent3,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울전세_위치.csv")
+write.csv(apt_buy3,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울매매_위치.csv")
+
+apt_buy3<-apt_buy3%>%
+  select(-법정동,-아파트,-지역구)
+apt_rent3<-apt_rent3%>%
+  select(-월세금액)
+
+
+##시계열 데이터 확인
+apt_buy3$지역코드<-as.factor(apt_buy3$지역코드)
+databreaks<-seq(as.Date("2020-01-01"),as.Date("2020-10-31"),"month")
