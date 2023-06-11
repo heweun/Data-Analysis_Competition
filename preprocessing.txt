@@ -17,9 +17,9 @@ S.code<-read.csv("C:\\Users\\hoeeun\\Desktop\\최종데이터\\새 폴더\\서�
 
 #데이터 호출
 ######open API 데이터 호출(아파트매매)
-seviceURL<-"http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
-operation<-"getRTMSDataSvcAptTrade"
-serviceKey<-"cIdpQ6nsl1wkTi8MuDCcdvaPwelskPKEwt9nuUieA099PQ5e92Eb6iMotBgxsqA7DYOSKVX1GfFUwyKqrsDVcQ%3D%3D"
+seviceURL
+operation
+serviceKey
 
 totalData<-data.frame()
 
@@ -84,12 +84,6 @@ str(apt_buy2)
 apt_buy2$day<-as.Date(apt_buy2$day)
 
 write.csv(apt_buy2,file="C:\\Users\\hoeeun\\Desktop\\학술제\\서울실매매가_final.csv")
-
-#데이터 호출
-######open API 데이터 호출(아파트전월세)
-seviceURL<-"http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
-operation<-"getRTMSDataSvcAptRent"
-serviceKey<-"cIdpQ6nsl1wkTi8MuDCcdvaPwelskPKEwt9nuUieA099PQ5e92Eb6iMotBgxsqA7DYOSKVX1GfFUwyKqrsDVcQ%3D%3D"
 
 totalData_rent<-data.frame()
 
